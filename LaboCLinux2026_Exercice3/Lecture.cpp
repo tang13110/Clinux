@@ -6,12 +6,14 @@
 
 int main(int argc,char*argv[])
 {
-  if (argc != 2) 
+  if (argc != 2) //logique car il en faut deux (appel + nom du groupe)
   {
 	  printf("Erreur: Trop ou trop peu d\'argument(s)...\n");
 	  exit(1);
   }
-
+  //Pour rappel, le passage d'argument à un main se fait via arc (nombre d'éléments dans le vecteur)
+  //et argv(le vecteur en question). Celui-ci a la particularité d'abriter en pos 0 l'appel du programme.
+  //C'est pour ça qu'ici il commence à argv[1]
   fprintf(stderr,"Lecture pour le groupe %s\n",argv[1]);
 
   int  compteur = 0;

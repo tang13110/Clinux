@@ -41,7 +41,7 @@ int hash(const char* motDePasse)
 {
   int i, somme = 0;
   for(i = 0; motDePasse[i] != '\0'; i++){
-    somme = somme + motDePasse[i] * (i + 1);
+    somme = somme + motDePasse[i] * (i + 1); //cast int ?
   }
   somme = somme%97;
   return somme;

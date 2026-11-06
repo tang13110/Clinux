@@ -137,8 +137,27 @@ const char* MainWindowEx3::getGroupe3()
 void MainWindowEx3::on_pushButtonLancerRecherche_clicked()
 {
   fprintf(stderr,"Clic sur le bouton Lancer Recherche\n");
-  // TO DO
-  int idFils1,idFils2,idFils3;
+
+  int idFils1;
+  if((idFils1 = fork()) == 0){ //le premier fils. Mettre le test -1
+    char test[80];
+    strcpy(test, getGroupe1());
+    printf("(Fils) PID : %d\n",getpid());
+    printf("(Fils) PPID : %d\n",getppid());
+    printf("%d", execv("./Lecture", test));
+    //Utiliser la commande getGroupe1 pour retourner un char* du groupe à vérifier.
+    //Pour le exec de ./Lecture, mettre dans argv le groupe à vérifier.
+    //Utiliser execv pour faire passer un vecteur.
+    //ne pas oublier le exit pour fermer le processus fils
+    //ne pas oublier le sleep
+    exit(0);
+  }
+  else{ //essayer de mettre
+    sleep(2);
+    printf("(Père) PID : %d\n",getpid());
+    printf("(Père) PPID : %d\n",getppid());
+    //dans le père. Mettre la boucle while avec wait ?
+  }
 }
 
 void MainWindowEx3::on_pushButtonVider_clicked()
