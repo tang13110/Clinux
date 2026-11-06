@@ -138,36 +138,64 @@ void MainWindowEx3::on_pushButtonLancerRecherche_clicked()
 {
   fprintf(stderr,"Clic sur le bouton Lancer Recherche\n");
 
-  int idFils1;
-  if((idFils1 = fork()) == 0){ //le premier fils. Mettre le test -1
-    char test[80];
-    strcpy(test, getGroupe1());
-    printf("(Fils) PID : %d\n",getpid());
-    printf("(Fils) PPID : %d\n",getppid());
-    printf("%d", execv("./Lecture", test));
-    //Utiliser la commande getGroupe1 pour retourner un char* du groupe à vérifier.
-    //Pour le exec de ./Lecture, mettre dans argv le groupe à vérifier.
-    //Utiliser execv pour faire passer un vecteur.
-    //ne pas oublier le exit pour fermer le processus fils
-    //ne pas oublier le sleep
-    exit(0);
+  int idFils1, idFils2, idFils3, id;
+  int status;
+
+  if(recherche1Selectionnee()){
+    if((idFils1 = fork()) == -1){
+      perror("Erreur de fork() Fils1");
+      exit(1);
+    }
+    if(!idFils1){
+      execl("./Lecture","Lecture", getGroupe1(), NULL);
+      printf("test");
+    }
   }
-  else{ //essayer de mettre
-    sleep(2);
-    printf("(Père) PID : %d\n",getpid());
-    printf("(Père) PPID : %d\n",getppid());
-    //dans le père. Mettre la boucle while avec wait ?
+
+  if(recherche2Selectionnee()){
+    if((idFils2 = fork()) == -1){
+      perror("Erreur de fork() Fils2");
+      exit(1);
+    }
+    if(!idFils2){
+      execl("./Lecture","Lecture", getGroupe2(), NULL);
+    }
+  }
+
+  if(recherche3Selectionnee()){
+    if((idFils3 = fork()) == -1){
+      perror("Erreur de fork() Fils3");
+      exit(1);
+    }
+    if(!idFils3){
+      execl("./Lecture","Lecture", getGroupe3(), NULL);
+    }
+  }
+  
+  while((id = wait(&status)) != -1){
+    printf("%d\n", id);
+    if(WIFEXITED(status)){
+      if(idFils1 == id){setResultat1(status);};
+      if(idFils2 == id){setResultat2(status);};
+      if(idFils3 == id){setResultat3(status);};
+    }
   }
 }
+
 
 void MainWindowEx3::on_pushButtonVider_clicked()
 {
   fprintf(stderr,"Clic sur le bouton Vider\n");
-  // TO DO
+  setGroupe1("");
+  setGroupe2("");
+  setGroupe3("");
+  setResultat1(0);
+  setResultat2(0);
+  setResultat3(0);
 }
 
 void MainWindowEx3::on_pushButtonQuitter_clicked()
 {
   fprintf(stderr,"Clic sur le bouton Quitter\n");
-  // TO DO
+  exit(0);
 }
