@@ -14,15 +14,12 @@ MainWindowEx4::MainWindowEx4(QWidget *parent):QMainWindow(parent),ui(new Ui::Mai
   ui->setupUi(this);
   ui->pushButtonAnnulerTous->setVisible(false);
 
-  // armement de SIGCHLD
-  // TO DO
-
-  struct sigaction armerSIGCHILD;
+  struct sigaction armerSIGCHILD; //attribution des valeurs à la structure
 
   armerSIGCHILD.sa_handler = HandlerSIGCHLD;
   sigemptyset(&armerSIGCHILD.sa_mask);
   armerSIGCHILD.sa_flags = 0;
-  if (sigaction(SIGCHLD,&armerSIGCHILD,NULL) == -1)
+  if (sigaction(SIGCHLD,&armerSIGCHILD,NULL) == -1) // armement de SIGCHLD
   {
     perror("Erreur de sigaction");
     exit(1);
@@ -169,6 +166,7 @@ void MainWindowEx4::on_pushButtonDemarrerTraitements_clicked()
       exit(1);
     }
     if(!idFils1){
+      printf("Id fils 1 %d\n", getpid());
       execl("./Traitement","Lecture", getGroupe1(), "200", NULL);
     }
   }
@@ -179,6 +177,7 @@ void MainWindowEx4::on_pushButtonDemarrerTraitements_clicked()
       exit(1);
     }
     if(!idFils2){
+      printf("Id fils 2 %d\n", getpid());
       execl("./Traitement","Lecture", getGroupe2(), "450", NULL);
     }
   }
@@ -189,6 +188,7 @@ void MainWindowEx4::on_pushButtonDemarrerTraitements_clicked()
       exit(1);
     }
     if(!idFils3){
+      printf("Id fils 3 %d\n", getpid());
       execl("./Traitement","Lecture", getGroupe3(), "700", NULL);
     }
   }
@@ -235,13 +235,14 @@ void MainWindowEx4::on_pushButtonAnnulerTous_clicked()
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void HandlerSIGCHLD(int){
-  int id, status;
+  int id; 
+  int status;
 
   id = wait(&status);
-  printf("Voici l'id du fils mort : %d\n", id);
+  printf("Voici l'id du fils mort : %d\nVoici la valeur de retour status : %d\n", id, WEXITSTATUS(status));
   if(WIFEXITED(status)){
-    if(idFils1 == id){w->MainWindowEx4::setResultat1(status);};
-    if(idFils2 == id){w->MainWindowEx4::setResultat2(status);};
-    if(idFils3 == id){w->MainWindowEx4::setResultat3(status);};
+    if(idFils1 == id){w->MainWindowEx4::setResultat1(WEXITSTATUS(status));};
+    if(idFils2 == id){w->MainWindowEx4::setResultat2(WEXITSTATUS(status));};
+    if(idFils3 == id){w->MainWindowEx4::setResultat3(WEXITSTATUS(status));};
   }
 }

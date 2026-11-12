@@ -2,7 +2,7 @@
 
 #include <QApplication>
 
-MainWindowEx4 *w;
+MainWindowEx4 *w; //variable globale externe qu'on utilise dans les autres fichiers. Extern car la même
 
 int main(int argc, char *argv[])
 {

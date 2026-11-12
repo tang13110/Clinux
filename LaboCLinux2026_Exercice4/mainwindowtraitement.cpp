@@ -31,7 +31,7 @@ MainWindowTraitement::MainWindowTraitement(QWidget *parent):QMainWindow(parent),
   connexion = mysql_init(NULL);
   mysql_real_connect(connexion,"localhost","Student","PassStudent1_","PourStudent",0,0,0);
   char requete[200];
-  sprintf(requete,"select * from UNIX_EX3 where groupe='%s' order by nom;",groupe);
+  sprintf(requete,"select * from UNIX_EX3 where groupe='%s' order by nom;",groupe); //copie dans requete tout le char de droite
   mysql_query(connexion,requete),
   resultat = mysql_store_result(connexion);
 
@@ -94,6 +94,7 @@ void handlerSIGALRM(int sig)
   if ((tuple = mysql_fetch_row(resultat)) == NULL) 
     exit(compteur);
 
+  //printf("nombre d'étudiant compté maintenant : %d\n", compteur);
   compteur++;
   w->setEtudiantTraite(tuple[1]);  // !!! HandlerSIGALRM n'est pas une méthode membre de
   w->setDejaTraites(compteur);     // !!! la classe MainWindowTraitement, d'ou le w->... !!!! ICI !!!!
